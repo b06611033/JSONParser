@@ -6,11 +6,12 @@ import MentionPrinter from "./components/MentionPrinter";
 import ClausePrinter from "./components/ClausePrinter";
 
 class Obj {
-  constructor(type, text, liNum, color) {
+  constructor(type, text, liNum, color, clauseLayer) {
     this.type = type;
     this.text = text;
     this.color = color;
     this.liNum = liNum;
+    this.clauseLayer = clauseLayer;
   }
 }
 
@@ -19,19 +20,19 @@ function App() {
 
   let liVal = 0;
 
-  function dfs(obj, type = "") {
+  function dfs(obj, type = "", clauseLayer) {
     const result = [];
 
-    function traverse(node, currentType, currentColor) {
-      if (!node) {
-        return;
-      }
+    function traverse(node, currentType, currentColor, clauseLayer) {
 
       // Visit the current node
       if (node.type) {
         currentType = node.type;
         if (node.type === "li") {
           liVal += 1;
+        }
+        if (node.type === "clause") {
+          clauseLayer += 1;
         }
       }
       if (node.color) {
@@ -46,19 +47,29 @@ function App() {
           inputText = node.text;
         }
         let finalText;
-        if(node.underline) {
+        if (node.underline) {
           finalText = "<u>" + inputText + "</u>";
+        } else {
+          finalText = inputText;
         }
-        else {
-          finalText = inputText
-        }
-        const text = new Obj(currentType, finalText, liVal, currentColor);
+        const text = new Obj(
+          currentType,
+          finalText,
+          liVal,
+          currentColor,
+          clauseLayer
+        );
         result.push(text);
       }
 
       // Recursive call for each child
       if (node.children && node.children.length > 0) {
-        node.children.forEach((child) => traverse(child, currentType));
+        node.children.forEach((child) =>
+          traverse(child, currentType, clauseLayer)
+        );
+      }
+      if (node.type === "clause") {
+        result.push(new Obj(obj.children[0].type, "\n", currentColor, clauseLayer));
       }
     }
 
@@ -66,7 +77,7 @@ function App() {
     return result;
   }
 
-  const output = dfs(sample[0], "", "");
+  const output = dfs(sample[0], "", 0);
 
   const combinedOutput = output.reduce((acc, obj) => {
     const lastIndex = acc.length - 1;
@@ -90,15 +101,16 @@ function App() {
   }, []);
 
   const finalOutput = combinedOutput.flatMap((obj) => {
-    if (obj.text.includes('\n')) {
-      const textArray = obj.text.split('\n').filter((text) => text.trim() !== '');
+    if (obj.text.includes("\n")) {
+      const textArray = obj.text
+        .split("\n")
+        .filter((text) => text.trim() !== "");
       return textArray.map((text) => new Obj(obj.type, text));
     } else {
       console.log(obj.text);
       return obj;
     }
   });
-  
 
   // Perform DFS starting from the root of the object
   return (
@@ -118,7 +130,6 @@ function App() {
             return <MentionPrinter value={obj.text} />;
           case "clause":
             return <ClausePrinter value={obj.text} />;
-
           default:
             return null;
         }
