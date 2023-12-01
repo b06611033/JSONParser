@@ -6,7 +6,7 @@ import MentionPrinter from "./components/MentionPrinter";
 import ClausePrinter from "./components/ClausePrinter";
 
 class Obj {
-  constructor(type, text, liNum,color) {
+  constructor(type, text, liNum, color) {
     this.type = type;
     this.text = text;
     this.color = color;
@@ -39,12 +39,11 @@ function App() {
       }
       if (node.text) {
         let inputText;
-        if(node.bold) {
-          inputText = "<b>" + node.text + "</b>";
+        if (node.bold) {
+          inputText = "<strong>" + node.text + "</strong>";
           //inputText = node.text;
-        }
-        else{
-          inputText = node.text
+        } else {
+          inputText = node.text;
         }
         const text = new Obj(currentType, inputText, liVal, currentColor);
         result.push(text);
@@ -64,26 +63,39 @@ function App() {
 
   const combinedOutput = output.reduce((acc, obj) => {
     const lastIndex = acc.length - 1;
-  
+    console.log(obj.text.substring(0, 1));
+    console.log(obj.text);
     if (
-      (lastIndex >= 0 && acc[lastIndex].type === obj.type && obj.type !== "lic") ||
+      (lastIndex >= 0 &&
+        acc[lastIndex].type === obj.type &&
+        obj.type !== "lic") ||
       (obj.type === "lic" && acc[lastIndex].liNum === obj.liNum) ||
       obj.type === "mention"
     ) {
       // Combine text for the same type
-      acc[lastIndex].text += " " + obj.text;
+      acc[lastIndex].text += "" + obj.text;
     } else {
       // Add a new object to the accumulator
       acc.push(new Obj(obj.type, obj.text, obj.liNum, obj.color));
     }
-  
+
     return acc;
   }, []);
+
+  const finalOutput = combinedOutput.flatMap((obj) => {
+    if (obj.text.includes('\n')) {
+      const textArray = obj.text.split('\n').filter((text) => text.trim() !== '');
+      return textArray.map((text) => new Obj(obj.type, text));
+    } else {
+      return obj;
+    }
+  });
+  
 
   // Perform DFS starting from the root of the object
   return (
     <div>
-      {combinedOutput.map((obj, index) => {
+      {finalOutput.map((obj, index) => {
         // Check the type and render the corresponding printer
         switch (obj.type) {
           case "h1":
@@ -100,7 +112,7 @@ function App() {
             return <ClausePrinter value={obj.text} />;
 
           default:
-            return null; 
+            return null;
         }
       })}
     </div>
