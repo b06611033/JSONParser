@@ -1,9 +1,22 @@
-import React from 'react';
+import React from "react";
 
-const H4Printer = ({ value}) => {
+export default function H4Printer({ data }) {
+  let text = [];
+  data.children.forEach((element) => {
+    let subText = element.text;
+    if (element.bold) {
+      subText = "<b>" + subText + "</b>";
+    }
+    if (element.underline) {
+      subText = "<u>" + subText + "</u>";
+    }
+    text.push(subText);
+  });
   return (
-    <h4 dangerouslySetInnerHTML={{ __html: value }} />
+    <>
+      {text.map((subText) => (
+        <h4 dangerouslySetInnerHTML={{ __html: subText }} />
+      ))}
+    </>
   );
-};
-  
-  export default H4Printer;
+}
