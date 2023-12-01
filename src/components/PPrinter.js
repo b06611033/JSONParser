@@ -1,11 +1,9 @@
 import React from 'react';
 
-const PPrinter = ({ value }) => {
-    return (
-      <div>
-        <p>{value}</p>
-      </div>
-    );
-  };
+const PPrinter = ({ value}) => {
+  return (
+    <p dangerouslySetInnerHTML={{ __html: value }} />
+  );
+};
   
   export default PPrinter;

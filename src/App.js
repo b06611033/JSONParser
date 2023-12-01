@@ -40,8 +40,8 @@ function App() {
       if (node.text) {
         let inputText;
         if(node.bold) {
-          //inputText = "<b>" + node.text + "<b>";
-          inputText = node.text;
+          inputText = "<b>" + node.text + "</b>";
+          //inputText = node.text;
         }
         else{
           inputText = node.text
@@ -66,7 +66,7 @@ function App() {
     const lastIndex = acc.length - 1;
   
     if (
-      (lastIndex >= 0 && acc[lastIndex].type === obj.type && obj.type != "lic") ||
+      (lastIndex >= 0 && acc[lastIndex].type === obj.type && obj.type !== "lic") ||
       (obj.type === "lic" && acc[lastIndex].liNum === obj.liNum) ||
       obj.type === "mention"
     ) {

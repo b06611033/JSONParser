@@ -1,11 +1,9 @@
 import React from 'react';
 
-const LicPrinter = ({ value }) => {
-    return (
-      <div>
-        <li>{value}</li>
-      </div>
-    );
-  };
+const LicPrinter = ({ value}) => {
+  return (
+    <li dangerouslySetInnerHTML={{ __html: value }} />
+  );
+};
   
   export default LicPrinter;
