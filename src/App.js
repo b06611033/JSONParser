@@ -6,12 +6,12 @@ import MentionPrinter from "./components/MentionPrinter";
 import ClausePrinter from "./components/ClausePrinter";
 
 class Obj {
-  constructor(type, text, liNum, color, clauseLayer) {
+  constructor(type, text, liNum, clauseLayer, clauseNumber) {
     this.type = type;
     this.text = text;
-    this.color = color;
     this.liNum = liNum;
     this.clauseLayer = clauseLayer;
+    this.clauseNumber = clauseNumber;
   }
 }
 
@@ -20,10 +20,10 @@ function App() {
 
   let liVal = 0;
 
-  function dfs(obj, type = "", clauseLayer) {
+  function dfs(obj, type, clauseLayer) {
     const result = [];
-
-    function traverse(node, currentType, currentColor, clauseLayer) {
+    const clauseNum = [1,1,1,1,1,1,1,1,1,1,1,1];
+    function traverse(node, currentType, clauseLayer) {
 
       // Visit the current node
       if (node.type) {
@@ -32,17 +32,16 @@ function App() {
           liVal += 1;
         }
         if (node.type === "clause") {
+          if(clauseLayer === 0)  result.push(new Obj("clause", clauseNum[clauseLayer].toString() + ". ", liVal, clauseLayer, clauseNum[clauseLayer]));
+          if(clauseLayer === 1)  result.push(new Obj("clause", "(" + String.fromCharCode(96 + clauseNum[clauseLayer]) + ") ", liVal, clauseLayer, clauseNum[clauseLayer]));
+          clauseNum[clauseLayer] += 1;
           clauseLayer += 1;
         }
-      }
-      if (node.color) {
-        currentColor = node.color;
       }
       if (node.text) {
         let inputText;
         if (node.bold) {
           inputText = "<strong>" + node.text + "</strong>";
-          //inputText = node.text;
         } else {
           inputText = node.text;
         }
@@ -56,8 +55,8 @@ function App() {
           currentType,
           finalText,
           liVal,
-          currentColor,
-          clauseLayer
+          clauseLayer,
+          0,
         );
         result.push(text);
       }
@@ -69,15 +68,15 @@ function App() {
         );
       }
       if (node.type === "clause") {
-        result.push(new Obj(obj.children[0].type, "\n", currentColor, clauseLayer));
+        result.push(new Obj(obj.children[0].type, "\n", liVal, clauseLayer, 0));
       }
     }
 
-    traverse(obj, type);
+    traverse(obj, type, clauseLayer);
     return result;
   }
 
-  const output = dfs(sample[0], "", 0);
+  const output = dfs(sample[0], "",0);
 
   const combinedOutput = output.reduce((acc, obj) => {
     const lastIndex = acc.length - 1;
@@ -86,11 +85,12 @@ function App() {
     if (
       (lastIndex >= 0 &&
         acc[lastIndex].type === obj.type &&
-        obj.type !== "lic") ||
+        obj.type !== "lic" && acc[lastIndex].text.substring(acc[lastIndex].text.length-1, acc[lastIndex].text.length) !== ".") ||
       (obj.type === "lic" && acc[lastIndex].liNum === obj.liNum) ||
-      obj.type === "mention"
+      obj.type === "mention" || (lastIndex >= 0 && acc[lastIndex].type === "clause")
     ) {
       // Combine text for the same type
+      if(lastIndex >= 0 && acc[lastIndex].type === "clause") acc[lastIndex].type = obj.type;
       acc[lastIndex].text += "" + obj.text;
     } else {
       // Add a new object to the accumulator
