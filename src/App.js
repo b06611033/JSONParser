@@ -40,9 +40,8 @@ function App() {
       if (node.text) {
         let inputText;
         if(node.bold) {
-          inputText = "<b>" + node.text + "<b>";
+          //inputText = "<b>" + node.text + "<b>";
           inputText = node.text;
-          console.log("hiiiiiiii");
         }
         else{
           inputText = node.text
