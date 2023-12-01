@@ -1,10 +1,10 @@
-import LicPrinter from "./LicPrinter"
+import Lic from "./Lic"
 
 export default function Ul({data}) {
     return(
         <ul>
             {data.children.map((element)=>(
-                <LicPrinter data={element}/>
+                <Lic data={element}/>
             ))}
         </ul>
     )

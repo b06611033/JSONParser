@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function H4Printer({ data }) {
+export default function H4({ data }) {
   let text = [];
   data.children.forEach((element) => {
     let subText = element.text;

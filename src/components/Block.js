@@ -1,5 +1,5 @@
-import H1Printer from "./H1Printer";
-import PPrinter from "./PPrinter";
+import H1 from "./H1";
+import Paragraph from "./Paragraph";
 import Clauses from "./Clauses";
 
 export default function Block({data}) {
@@ -15,9 +15,9 @@ export default function Block({data}) {
         {others.map((data)=>{
             switch(data.type){
                 case "h1":
-                    return <H1Printer data={data}/>
+                    return <H1 data={data}/>
                 case "p":
-                    return <PPrinter data={data}/>
+                    return <Paragraph data={data}/>
                 case "block":
                     return <Block data={data}/>
             }

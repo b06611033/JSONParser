@@ -1,9 +1,9 @@
 import React from "react";
-import MentionPrinter from "./MentionPrinter";
+import Mention from "./Mention";
 
-export default function PPrinter({ data }) {
+export default function Lic({ data }) {
   let text = [];
-  data.children.forEach((element) => {
+  data.children[0].children.forEach((element) => {
     let obj;
     if (element.type === "mention") {
       obj = { type: "mention", obj: element };
@@ -15,7 +15,7 @@ export default function PPrinter({ data }) {
       if (element.underline) {
         subText = "<u>" + subText + "</u>";
       }
-      subText = subText.replace(/\n/g, '<br>');
+      subText = subText.replace(/\n/g, "<br>");
 
       obj = { type: "text", obj: subText };
     }
@@ -23,19 +23,16 @@ export default function PPrinter({ data }) {
   });
 
   return (
-    <>
+    <li>
       {text.map((element) =>
         element.type === "text" ? (
-          <p style={{display: "inline"}}>
-            <span
-              dangerouslySetInnerHTML={{ __html: element.obj }}
-            />
+          <p style={{ display: "inline" }}>
+            <span dangerouslySetInnerHTML={{ __html: element.obj }} />
           </p>
         ) : (
-          <MentionPrinter data={element.obj}></MentionPrinter>
+          <Mention data={element.obj}></Mention>
         )
       )}
-      <br></br>
-    </>
+    </li>
   );
 }

@@ -1,5 +1,5 @@
-import H4Printer from "./H4Printer";
-import PPrinter from "./PPrinter";
+import H4 from "./H4";
+import Paragraph from "./Paragraph";
 import Clauses from "./Clauses";
 import Ul from "./Ul";
 
@@ -15,9 +15,9 @@ export default function Clause({ data }) {
       {others.map((element) => {
         switch (element.type) {
           case "h4":
-            return <H4Printer data={element} />;
+            return <H4 data={element} />;
           case "p":
-            return <PPrinter data={element} />;
+            return <Paragraph data={element} />;
           case "ul":
             return <Ul data={element} />;
         }

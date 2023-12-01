@@ -1,7 +1,7 @@
 import React from "react";
-import MentionPrinter from "./MentionPrinter";
+import Mention from "./Mention";
 
-export default function H1Printer({ data }) {
+export default function H1({ data }) {
   // console.log(data)
   let text = [];
   data.children.forEach((element) => {
@@ -25,7 +25,7 @@ export default function H1Printer({ data }) {
   return (
     <>
       {text.map((element) => (
-        element.type === "text"?<h1 dangerouslySetInnerHTML={{ __html: element.obj }} />:<MentionPrinter data={element.obj}></MentionPrinter>
+        element.type === "text"?<h1 dangerouslySetInnerHTML={{ __html: element.obj }} />:<Mention data={element.obj}></Mention>
       ))
       }
     </>
