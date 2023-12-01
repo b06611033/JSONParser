@@ -45,7 +45,14 @@ function App() {
         } else {
           inputText = node.text;
         }
-        const text = new Obj(currentType, inputText, liVal, currentColor);
+        let finalText;
+        if(node.underline) {
+          finalText = "<u>" + inputText + "</u>";
+        }
+        else {
+          finalText = inputText
+        }
+        const text = new Obj(currentType, finalText, liVal, currentColor);
         result.push(text);
       }
 
@@ -87,6 +94,7 @@ function App() {
       const textArray = obj.text.split('\n').filter((text) => text.trim() !== '');
       return textArray.map((text) => new Obj(obj.type, text));
     } else {
+      console.log(obj.text);
       return obj;
     }
   });
