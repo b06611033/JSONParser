@@ -5,11 +5,13 @@ import Clauses from "./Clauses";
 export default function Block({data}) {
     const clauses = [];
     const others=[];
+    let layer = 0
     data.children.forEach((child, index) => {
         if(index === 5) clauses.push(child.children[0]);
         else if(child.type === "clause") clauses.push(child);
         else others.push(child);
     });
+
     return (
         <>
         {others.map((data)=>{
@@ -22,7 +24,10 @@ export default function Block({data}) {
                     return <Block data={data}/>
             }
         })}
-        <Clauses data={clauses}/>
+        <Clauses data={clauses} layer={layer}/>
         </>
     )
+    
+   
 }
+

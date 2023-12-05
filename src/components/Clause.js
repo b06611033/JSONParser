@@ -3,7 +3,7 @@ import Paragraph from "./Paragraph";
 import Clauses from "./Clauses";
 import Ul from "./Ul";
 
-export default function Clause({ data }) {
+export default function Clause({ data, layer}) {
   const clauses = [];
   const others = [];
   data.children.forEach((child, index) => {
@@ -12,6 +12,7 @@ export default function Clause({ data }) {
   });
   return (
     <li>
+
       {others.map((element) => {
         switch (element.type) {
           case "h4":
@@ -22,7 +23,7 @@ export default function Clause({ data }) {
             return <Ul data={element} />;
         }
       })}
-      <Clauses data={clauses} />
+      <Clauses data={clauses} layer={layer+1}/>
     </li>
   );
 }

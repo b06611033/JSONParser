@@ -7,7 +7,8 @@ export default function Paragraph({ data }) {
     let obj;
     if (element.type === "mention") {
       obj = { type: "mention", obj: element };
-    } else {
+    } 
+    else {
       let subText = element.text;
       if (element.bold) {
         subText = "<b>" + subText + "</b>";
@@ -32,7 +33,7 @@ export default function Paragraph({ data }) {
             />
           </p>
         ) : (
-          <Mention data={element.obj}></Mention>
+         <Mention data={element.obj}></Mention>
         )
       )}
       <br></br>
